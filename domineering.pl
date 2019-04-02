@@ -8,7 +8,7 @@ turn(joueur1) .
 vertical(joueur1, X, Y) :- turn(joueur1), ligne(X), colonne(Y) .
 
 
-ligne(5).
+ligne(6).
 colonne(6).
 
 suivant(0, 1).
@@ -18,23 +18,19 @@ suivant(3, 4).
 suivant(4 ,5).
 suivant(5, 6).
 
-ajoute_debut(X, L1, [X|L1]).
-
-
-creerListe([-|_], X) :- ligne(X).
-creerListe([-|L], X) :-
-    suivant(X, Y),
-    \+ligne(X),
-    creerListe(L, Y).
-
-%creerListe(L, X) :-
- %   suivant(X, Y),
-  %  ajoute_debut(-, L, L),
-   % creerListe(L, Y).
-
-
-initListe([b], X) :- ligne(X).
-initListe([a|L], X) :-
+initLigne([-], X) :- ligne(X).
+initLigne([-|L], X) :-
     \+ligne(X),
     suivant(X, Y),
-    initListe(L, Y).
+    initLigne(L, Y).
+
+initColonne([L1], X) :- 
+    colonne(X), 
+    initLigne(L1, 1).
+initColonne([L1|L], X) :-
+    \+colonne(X),
+    suivant(X, Y),
+    initLigne(L1, 1),
+    initColonne(L, Y).
+
+init(L) :- initColonne(L, 1).
