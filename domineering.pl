@@ -37,6 +37,5 @@ init(L) :- initColonne(L, 1), afficherTableau(L).
 
 afficherTableau([]).
 afficherTableau([X|L]) :- 
-    print(X), 
-    nl,
+    writeln(X), 
     afficherTableau(L).
