@@ -31,3 +31,10 @@ creerListe([-|L], X) :-
  %   suivant(X, Y),
   %  ajoute_debut(-, L, L),
    % creerListe(L, Y).
+
+
+initListe([b], X) :- ligne(X).
+initListe([a|L], X) :-
+    \+ligne(X),
+    suivant(X, Y),
+    initListe(L, Y).
