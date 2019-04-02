@@ -1,7 +1,6 @@
 joueur(joueur1) .
 joueur(joueur2) .
 
-
 turn(joueur1) .
 
 
@@ -18,7 +17,8 @@ suivant(3, 4).
 suivant(4 ,5).
 suivant(5, 6).
 
-initLigne([-], X) :- ligne(X).
+initLigne([-], X) :- 
+    ligne(X).
 initLigne([-|L], X) :-
     \+ligne(X),
     suivant(X, Y),
@@ -33,4 +33,10 @@ initColonne([L1|L], X) :-
     initLigne(L1, 1),
     initColonne(L, Y).
 
-init(L) :- initColonne(L, 1).
+init(L) :- initColonne(L, 1), afficherTableau(L).
+
+afficherTableau([]).
+afficherTableau([X|L]) :- 
+    print(X), 
+    nl,
+    afficherTableau(L).
