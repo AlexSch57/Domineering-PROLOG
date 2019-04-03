@@ -39,3 +39,17 @@ afficherTableau([]).
 afficherTableau([X|L]) :- 
     writeln(X), 
     afficherTableau(L).
+    
+    
+lancerJeu :-
+    description,
+    init(Plateau),
+    jouer(Plateau).
+    
+jouer(Plateau) :-
+    afficherTableau(Plateau),
+    write("Case : "),
+    read(PositionLigne),
+    read(PositionColonne),
+    %placerH(Plateau, PositionLigne, PositionColonne, NewPlateau),
+    jouer(NewPlateau).
