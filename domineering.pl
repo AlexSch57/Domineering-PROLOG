@@ -40,6 +40,9 @@ afficherTableau([X|L]) :-
     writeln(X), 
     afficherTableau(L).
     
+  
+description :-
+    writeln("Description du jeu et des regles blablabla...").
     
 lancerJeu :-
     description,
