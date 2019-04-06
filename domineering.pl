@@ -95,13 +95,16 @@ extraire(Position, X, [_ | Liste], ElementExtraite) :-
     extraire(Position, XSuiv, Liste, ElementExtraite).
 
 
-% Ne se termine pas en 1 coup et creer des bugs pour quitter le jeu! -->
-% a corriger Remplacer l'element qui se trouve a l'index indique.
+% Remplacer l'element qui se trouve a l'index indique.
 remplacer(_, _, [], _, []).
+
 remplacer(Position, Position, [_ | Liste], Element, [Element | CopieReste]) :-
     suivant(Position, PSuiv),
     remplacer(Position, PSuiv, Liste, Element, CopieReste).
+
 remplacer(Position, Y, [Tete | Liste], Element, [Tete | CopieReste]) :-
     suivant(Y, YSuiv),
+    \+Position == Y,
     remplacer(Position, YSuiv, Liste, Element, CopieReste).
+
 
