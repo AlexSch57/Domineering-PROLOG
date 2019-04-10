@@ -1,12 +1,6 @@
 joueur(joueur1) .
 joueur(joueur2) .
 
-turn(joueur1) .
-
-
-vertical(joueur1, X, Y) :- turn(joueur1), ligne(X), colonne(Y) .
-
-
 ligne(6).
 colonne(6).
 
@@ -35,7 +29,8 @@ initColonne([L1|L], X) :-
 
 init(L) :- initColonne(L, 1), afficherTableau(L).
 
-afficherTableau([]).
+afficherTableau([]) :-
+    writeln("").
 afficherTableau([X|L]) :-
     writeln(X),
     afficherTableau(L).
@@ -50,35 +45,47 @@ lancerJeu :-
     jouer(Plateau, joueur1).
 
 jouer(Plateau, joueur1) :-
-    write("Case X: "),
+    writeln("Joueur 1 : "),
+    write("Ligne : "),
     read(X),
-    write("Case Y :"),
+    write("Colonne :"),
     read(Y),
-    placementHorizontal(o, X, Y, Plateau, NouveauPlateau),
+    placementHorizontal(o, X, Y, Plateau, NouveauPlateau, joueur1),
     afficherTableau(NouveauPlateau),
     jouer(NouveauPlateau, joueur2).
 
 jouer(Plateau, joueur2) :-
-    write("Case X: "),
+    writeln("Joueur 2 : "),
+    write("Ligne : "),
     read(X),
-    write("Case Y :"),
+    write("Colonne :"),
     read(Y),
-    placementVertical(x, X, Y, Plateau, NouveauPlateau),
+    placementVertical(x, X, Y, Plateau, NouveauPlateau, joueur2),
     afficherTableau(NouveauPlateau),
     jouer(NouveauPlateau, joueur1).
 
-
-
-
-placementHorizontal(Pion, X, Y, Plateau, NouveauPlateau) :-
+           
+placementHorizontal(Pion, X, Y, Plateau, NouveauPlateau, joueur1) :-
     placer(Pion, X, Y, Plateau, PlateauIntermediaire),
-    suivant(Y, YSuiv),
+    \+colonne(Y),
+    suivant(Y, YSuiv), 
     placer(Pion, X, YSuiv, PlateauIntermediaire, NouveauPlateau).
 
-placementVertical(Pion, X, Y, Plateau, NouveauPlateau) :-
+placementHorizontal(_, _, _, Plateau, _, joueur1) :-
+    writeln("Coup incorrect, veuillez recommencez"),
+    afficherTableau(Plateau),
+	jouer(Plateau, joueur1).
+
+placementVertical(Pion, X, Y, Plateau, NouveauPlateau, joueur2) :-
     placer(Pion, X, Y, Plateau, PlateauIntermediaire),
+    \+ligne(X),
     suivant(X, XSuiv),
     placer(Pion, XSuiv, Y, PlateauIntermediaire, NouveauPlateau).
+
+placementVertical(_, _, _, Plateau, _, joueur2) :-
+    writeln("Coup incorrect, veuillez recommencez"),
+    afficherTableau(Plateau),
+	jouer(Plateau, joueur2).
 
 
 placer(Pion, X, Y, Plateau, NouveauPlateau) :-
@@ -106,5 +113,3 @@ remplacer(Position, Y, [Tete | Liste], Element, [Tete | CopieReste]) :-
     suivant(Y, YSuiv),
     \+Position == Y,
     remplacer(Position, YSuiv, Liste, Element, CopieReste).
-
-
