@@ -87,9 +87,13 @@ placementVertical(_, _, _, Plateau, _, joueur2) :-
     afficherTableau(Plateau),
 	jouer(Plateau, joueur2).
 
+libre(X, Y, Plateau) :-
+    extraire(X, 1, Plateau, Liste),
+    extraire(Y, 1, Liste, -).
 
 placer(Pion, X, Y, Plateau, NouveauPlateau) :-
-    extraire(X, 1, Plateau, ListeX),
+    extraire(X, 1, Plateau, ListeX),   
+    libre(X, Y, Plateau),
     %writeln(ListeX),
     remplacer(Y, 1, ListeX, Pion, NouvelleListeX),
     %writeln(NouvelleListeX),
