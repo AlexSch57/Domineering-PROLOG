@@ -46,6 +46,17 @@ lancerJeu :-
     init(Plateau),
     jouer(Plateau, joueur1).
 
+% Arret du jeu
+jouer(Plateau, joueur1) :-
+    \+peutJouerHorizontal(Plateau, 1, 1),
+    writeln("Joueur 1 a perdu !."),
+    abort().
+
+jouer(Plateau, joueur2) :-
+    \+peutJouerVertical(Plateau, 1, 1),
+    writeln("Joueur 2 a perdu !"),
+    abort().
+
 jouer(Plateau, joueur1) :-
     peutJouerHorizontal(Plateau, 1, 1),
     writeln("Joueur 1 : "),
@@ -67,17 +78,6 @@ jouer(Plateau, joueur2) :-
     placementVertical(x, X, Y, Plateau, NouveauPlateau, joueur2),
     afficherTableau(NouveauPlateau),
     jouer(NouveauPlateau, joueur1).
-
-% Arret du jeu
-jouer(Plateau, joueur1) :-
-    \+peutJouerHorizontal(Plateau, 1, 1),
-    writeln("Joueur 1 a perdu !.").
-
-jouer(Plateau, joueur2) :-
-    \+peutJouerVertical(Plateau, 1, 1),
-    writeln("Joueur 2 a perdu !").
-
-
 
 placementHorizontal(Pion, X, Y, Plateau, NouveauPlateau, joueur1) :-
     placer(Pion, X, Y, Plateau, PlateauIntermediaire),
@@ -185,4 +185,4 @@ peutJouerHorizontal(Plateau, X, Y) :-
     ligne(X),
     \+emplacementHorizontalLibre(Plateau, X, Y),
     suivant(Y, YSuiv),
-    peutJouerHorizontal(Plateau, 1, YSuiv).
+	peutJouerHorizontal(Plateau, 1, YSuiv).
