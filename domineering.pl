@@ -46,6 +46,12 @@ lancerJeu :-
     init(Plateau),
     jouer(Plateau, joueur1).
 
+lireReponse(X, Y) :-
+    write("Ligne : "),
+    read(X),
+    write("Colonne :"),
+    read(Y).
+
 % Arret du jeu
 jouer(Plateau, joueur1) :-
     \+peutJouerHorizontal(Plateau, 1, 1),
@@ -60,10 +66,7 @@ jouer(Plateau, joueur2) :-
 jouer(Plateau, joueur1) :-
     peutJouerHorizontal(Plateau, 1, 1),
     writeln("Joueur 1 : "),
-    write("Ligne : "),
-    read(X),
-    write("Colonne :"),
-    read(Y),
+    lireReponse(X, Y),
     placementHorizontal(o, X, Y, Plateau, NouveauPlateau, joueur1),
     afficherTableau(NouveauPlateau),
     jouer(NouveauPlateau, joueur2).
@@ -71,10 +74,7 @@ jouer(Plateau, joueur1) :-
 jouer(Plateau, joueur2) :-
     peutJouerVertical(Plateau, 1, 1),
     writeln("Joueur 2 : "),
-    write("Ligne : "),
-    read(X),
-    write("Colonne :"),
-    read(Y),
+    lireReponse(X, Y),
     placementVertical(x, X, Y, Plateau, NouveauPlateau, joueur2),
     afficherTableau(NouveauPlateau),
     jouer(NouveauPlateau, joueur1).
@@ -185,4 +185,4 @@ peutJouerHorizontal(Plateau, X, Y) :-
     ligne(X),
     \+emplacementHorizontalLibre(Plateau, X, Y),
     suivant(Y, YSuiv),
-	peutJouerHorizontal(Plateau, 1, YSuiv).
+peutJouerHorizontal(Plateau, 1, YSuiv).
