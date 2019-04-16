@@ -206,4 +206,4 @@ peutJouerHorizontal(Plateau, X, Y) :-
     ligne(X),
     \+emplacementHorizontalLibre(Plateau, X, Y),
     suivant(Y, YSuiv),
-peutJouerHorizontal(Plateau, 1, YSuiv).
+    peutJouerHorizontal(Plateau, 1, YSuiv).
