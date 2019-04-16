@@ -1,8 +1,12 @@
+%
+% BASE DE FAITS
+%
+%
 joueur(joueur1).
 joueur(joueur2).
 
-ligne(6).
-colonne(6).
+ligne(2).		% Nombre de lignes composant le plateau.
+colonne(2).		% Nombre de colonnes composant le plateau.
 
 suivant(1, 2).
 suivant(2, 3).
@@ -11,6 +15,13 @@ suivant(4 ,5).
 suivant(5, 6).
 suivant(6, 7).  % La fonction remplacer( ) marche s'il y a un nombre suivant la taille maximale.
 
+
+
+%
+% FONCTIONS / REGLES
+%
+
+% Initialise une liste vide. Il s'agit d'une ligne dans un plateau.
 initLigne([-], X) :-
     ligne(X).
 initLigne([-|L], X) :-
@@ -18,6 +29,7 @@ initLigne([-|L], X) :-
     suivant(X, Y),
     initLigne(L, Y).
 
+% Initialise une liste de liste (= plateau)
 initColonne([L1], X) :-
     colonne(X),
     initLigne(L1, 1).
@@ -27,32 +39,38 @@ initColonne([L1|L], X) :-
     initLigne(L1, 1),
     initColonne(L, Y).
 
+% Initialise un plateau vide.
 init(L) :-
     initColonne(L, 1),
     afficherTableau(L).
 
+% Afficher le plateau de jeu
 afficherTableau([]) :-
     writeln("").
 afficherTableau([X|L]) :-
     writeln(X),
     afficherTableau(L).
 
-
+% Description du jeu. Doit se lancer au debut du jeu pour expliquer aux joueurs
+% le fonctionnement de la partie.
 description :-
     writeln("Description du jeu et des regles blablabla...").
 
+% Fonction pour lancer le jeu.
 lancerJeu :-
     description,
     init(Plateau),
     jouer(Plateau, joueur1).
 
+% Lire une position.
 lireReponse(X, Y) :-
     write("Ligne : "),
     read(X),
     write("Colonne :"),
     read(Y).
 
-% Arret du jeu
+% Pour jouer un tour.
+    % Arret du jeu.
 jouer(Plateau, joueur1) :-
     \+peutJouerHorizontal(Plateau, 1, 1),
     writeln("Joueur 1 a perdu !."),
@@ -63,6 +81,7 @@ jouer(Plateau, joueur2) :-
     writeln("Joueur 2 a perdu !"),
     abort().
 
+    % Jouer en placant un domino.
 jouer(Plateau, joueur1) :-
     peutJouerHorizontal(Plateau, 1, 1),
     writeln("Joueur 1 : "),
@@ -79,6 +98,7 @@ jouer(Plateau, joueur2) :-
     afficherTableau(NouveauPlateau),
     jouer(NouveauPlateau, joueur1).
 
+% Place un domino horizontalement sur plateau a la position spacifiee.
 placementHorizontal(Pion, X, Y, Plateau, NouveauPlateau, joueur1) :-
     placer(Pion, X, Y, Plateau, PlateauIntermediaire),
     \+colonne(Y),
@@ -90,6 +110,7 @@ placementHorizontal(_, _, _, Plateau, _, joueur1) :-
     afficherTableau(Plateau),
 	jouer(Plateau, joueur1).
 
+% Place un domino verticalement sur le plateau a la position spécifiee.
 placementVertical(Pion, X, Y, Plateau, NouveauPlateau, joueur2) :-
     placer(Pion, X, Y, Plateau, PlateauIntermediaire),
     \+ligne(X),
