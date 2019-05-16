@@ -1,19 +1,27 @@
 %
+% Pour lancer le jeu, executer : lancerJeu.
+% Dimensions maximales du plateau : 8x8.
+% 
+
+
+% 
 % BASE DE FAITS
-%
 %
 joueur(joueur1).
 joueur(joueur2).
 
-ligne(2).		% Nombre de lignes composant le plateau.
-colonne(2).		% Nombre de colonnes composant le plateau.
+ligne(8).		% Nombre de lignes composant le plateau.
+colonne(8).		% Nombre de colonnes composant le plateau.
 
+suivant(0, 1).
 suivant(1, 2).
 suivant(2, 3).
 suivant(3, 4).
 suivant(4 ,5).
 suivant(5, 6).
-suivant(6, 7).  % La fonction remplacer( ) marche s'il y a un nombre suivant la taille maximale.
+suivant(6, 7).
+suivant(7, 8).
+suivant(8, 9).
 
 
 
@@ -22,9 +30,9 @@ suivant(6, 7).  % La fonction remplacer( ) marche s'il y a un nombre suivant la 
 %
 
 % Initialise une liste vide. Il s'agit d'une ligne dans un plateau.
-initLigne([-], X) :-
+initLigne(['_'], X) :-
     ligne(X).
-initLigne([-|L], X) :-
+initLigne(['_'|L], X) :-
     \+ligne(X),
     suivant(X, Y),
     initLigne(L, Y).
@@ -42,14 +50,27 @@ initColonne([L1|L], X) :-
 % Initialise un plateau vide.
 init(L) :-
     initColonne(L, 1),
-    afficherTableau(L).
+    afficherTableau(0, L).
+
+afficherPremiereLigne(N) :-
+    colonne(N),
+    writeln(N).
+afficherPremiereLigne(N) :-
+    write(N), write("_"),
+    suivant(N, NSuiv),
+    afficherPremiereLigne(NSuiv).
 
 % Afficher le plateau de jeu
-afficherTableau([]) :-
+afficherTableau(_, []) :-
     writeln("").
-afficherTableau([X|L]) :-
+afficherTableau(0, L) :-
+    afficherPremiereLigne(0),
+    afficherTableau(1, L).
+afficherTableau(N, [X|L]) :-
+    write(N), write(" "),
     writeln(X),
-    afficherTableau(L).
+    suivant(N, NSuiv),
+    afficherTableau(NSuiv, L).
 
 % Description du jeu. Doit se lancer au debut du jeu pour expliquer aux joueurs
 % le fonctionnement de la partie.
@@ -73,12 +94,12 @@ lireReponse(X, Y) :-
     % Arret du jeu.
 jouer(Plateau, joueur1) :-
     \+peutJouerHorizontal(Plateau, 1, 1),
-    writeln("Joueur 1 a perdu !."),
+    write("Joueur 1 a perdu ! Le joueur 2 remporte la partie."),
     abort().
 
 jouer(Plateau, joueur2) :-
     \+peutJouerVertical(Plateau, 1, 1),
-    writeln("Joueur 2 a perdu !"),
+    writeln("Joueur 2 a perdu ! Le joureur 1 remporte la partie."),
     abort().
 
     % Jouer en placant un domino.
@@ -87,15 +108,15 @@ jouer(Plateau, joueur1) :-
     writeln("Joueur 1 : "),
     lireReponse(X, Y),
     placementHorizontal(o, X, Y, Plateau, NouveauPlateau, joueur1),
-    afficherTableau(NouveauPlateau),
+    afficherTableau(0, NouveauPlateau),
     jouer(NouveauPlateau, joueur2).
 
 jouer(Plateau, joueur2) :-
     peutJouerVertical(Plateau, 1, 1),
     writeln("Joueur 2 : "),
     lireReponse(X, Y),
-    placementVertical(x, X, Y, Plateau, NouveauPlateau, joueur2),
-    afficherTableau(NouveauPlateau),
+    placementVertical(d, X, Y, Plateau, NouveauPlateau, joueur2),
+    afficherTableau(0, NouveauPlateau),
     jouer(NouveauPlateau, joueur1).
 
 % Place un domino horizontalement sur plateau a la position spacifiee.
@@ -107,7 +128,7 @@ placementHorizontal(Pion, X, Y, Plateau, NouveauPlateau, joueur1) :-
 
 placementHorizontal(_, _, _, Plateau, _, joueur1) :-
     writeln("Coup incorrect, veuillez recommencez"),
-    afficherTableau(Plateau),
+    afficherTableau(0, Plateau),
 	jouer(Plateau, joueur1).
 
 % Place un domino verticalement sur le plateau a la position spécifiee.
@@ -119,13 +140,13 @@ placementVertical(Pion, X, Y, Plateau, NouveauPlateau, joueur2) :-
 
 placementVertical(_, _, _, Plateau, _, joueur2) :-
     writeln("Coup incorrect, veuillez recommencez"),
-    afficherTableau(Plateau),
+    afficherTableau(0, Plateau),
 	jouer(Plateau, joueur2).
 
 % Verifie si la case a la position indiquee est libre.
 libre(X, Y, Plateau) :-
     extraire(X, 1, Plateau, Liste),
-    extraire(Y, 1, Liste, -).
+    extraire(Y, 1, Liste, '_').
 
 % Creer un nouveau plateau avec la case indiquee occupee.
 placer(Pion, X, Y, Plateau, NouveauPlateau) :-
@@ -206,4 +227,4 @@ peutJouerHorizontal(Plateau, X, Y) :-
     ligne(X),
     \+emplacementHorizontalLibre(Plateau, X, Y),
     suivant(Y, YSuiv),
-    peutJouerHorizontal(Plateau, 1, YSuiv).
+peutJouerHorizontal(Plateau, 1, YSuiv).
