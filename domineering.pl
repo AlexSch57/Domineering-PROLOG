@@ -52,6 +52,7 @@ init(L) :-
     initColonne(L, 1),
     afficherTableau(0, L).
 
+% Affichage des numeros des colonnes
 afficherPremiereLigne(N) :-
     colonne(N),
     writeln(N).
