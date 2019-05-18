@@ -76,7 +76,11 @@ afficherTableau(N, [X|L]) :-
 % Description du jeu. Doit se lancer au debut du jeu pour expliquer aux joueurs
 % le fonctionnement de la partie.
 description :-
-    writeln("Description du jeu et des regles blablabla...").
+    writeln("Description du jeu :"),
+    writeln("Chaque joueur, l'un après l'autre, va sélectionner un numéro de ligne et un numéro de colonne."),
+    writeln("Ce numéro marquera la coordonnée du premier point qui sera marqué, un deuxième point sera marqué, respectivement pour le joueur 1 et 2 la colonne +1 et la ligne +1."),
+    writeln("Exemple : si le joueur 1 marque la case (1, 1), les cases (1, 1 ) et (1, 2) seront marquées"),
+    writeln("Ainsi, le joueur 1 va jouer en ligne, et le joueur 2 en colonne, dès qu'un des deux joueurs se retrouve dans l'incapacité de jouer, il perd.").
 
 % Fonction pour lancer le jeu.
 lancerJeu :-
@@ -89,7 +93,9 @@ lireReponse(X, Y) :-
     write("Ligne : "),
     read(X),
     write("Colonne :"),
-    read(Y).
+    read(Y),
+    X \== end_of_file,
+    Y \== end_of_file.
 
 % Pour jouer un tour.
     % Arret du jeu.
